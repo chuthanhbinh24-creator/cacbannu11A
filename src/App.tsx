@@ -95,7 +95,7 @@ const PhotoFrame = ({ children, className, delay }: { children: React.ReactNode;
     initial={{ opacity: 0, scale: 0.5 }}
     animate={{ opacity: 1, scale: 1 }}
     transition={{ delay, duration: 0.8, type: "spring" }}
-    className={`absolute w-24 h-32 md:w-32 md:h-40 bg-white p-2 rounded-2xl shadow-xl border-4 border-pink-200 flex flex-col items-center justify-center overflow-hidden animate-sway ${className}`}
+    className={`absolute w-36 h-52 md:w-48 md:h-64 bg-white p-2 rounded-2xl shadow-xl border-4 border-pink-200 flex flex-col items-center justify-center overflow-hidden animate-sway ${className}`}
   >
     {children}
   </motion.div>
