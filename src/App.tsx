@@ -227,7 +227,7 @@ export default function App() {
                 className="top-0 left-4 md:left-12 -rotate-6" 
                 delay={3} 
               >
-                <img src="anh/1.jpg" className="w-full h-full object-cover rounded-xl" />
+                <img src="https://files.catbox.moe/9nszlg.jpg" className="w-full h-full object-cover rounded-xl" />
               </PhotoFrame>
 
               <PhotoFrame 
