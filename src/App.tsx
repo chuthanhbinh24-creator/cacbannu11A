@@ -249,7 +249,7 @@ export default function App() {
                 className="bottom-0 right-16 md:right-32 rotate-3" 
                 delay={3.6} 
               >
-                <img src="anh/3.jpg" className="w-full h-full object-cover rounded-xl" />
+                <img src="anh/4.jpg" className="w-full h-full object-cover rounded-xl" />
               </PhotoFrame>
 
               <BloomingFlower />
