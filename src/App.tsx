@@ -234,7 +234,7 @@ export default function App() {
                 className="top-0 right-4 md:right-12 rotate-6" 
                 delay={3.2} 
               >
-                <img src="anh/2.jpg" className="w-full h-full object-cover rounded-xl" />
+                <img src="https://files.catbox.moe/69nynj.jpg" className="w-full h-full object-cover rounded-xl" />
               </PhotoFrame>
               
               {/* Bottom Pair - Closer to center */}
@@ -242,14 +242,14 @@ export default function App() {
                 className="bottom-0 left-16 md:left-32 -rotate-3" 
                 delay={3.4} 
               >
-                <img src="anh/3.jpg" className="w-full h-full object-cover rounded-xl" />
+                <img src="https://files.catbox.moe/dbjena.jpg" className="w-full h-full object-cover rounded-xl" />
               </PhotoFrame>
 
               <PhotoFrame 
                 className="bottom-0 right-16 md:right-32 rotate-3" 
                 delay={3.6} 
               >
-                <img src="anh/4.jpg" className="w-full h-full object-cover rounded-xl" />
+                <img src="https://files.catbox.moe/9nszlg.jpg" className="w-full h-full object-cover rounded-xl" />
               </PhotoFrame>
 
               <BloomingFlower />
