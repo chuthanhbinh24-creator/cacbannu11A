@@ -224,14 +224,14 @@ export default function App() {
             <div className="relative w-full max-w-4xl h-64 md:h-80 flex items-center justify-center z-10">
               {/* Top Pair - Wide apart */}
               <PhotoFrame 
-                className="top-0 left-4 md:left-12 -rotate-6" 
+                className="-top-6 md:-top-10 left-0 md:left-4 -rotate-6" 
                 delay={3} 
               >
                 <img src="https://files.catbox.moe/9nszlg.jpg" className="w-full h-full object-cover rounded-xl" />
               </PhotoFrame>
 
               <PhotoFrame 
-                className="top-0 right-4 md:right-12 rotate-6" 
+                className="-top-6 md:-top-10 right-0 md:right-4 rotate-6" 
                 delay={3.2} 
               >
                 <img src="https://files.catbox.moe/69nynj.jpg" className="w-full h-full object-cover rounded-xl" />
@@ -239,14 +239,14 @@ export default function App() {
               
               {/* Bottom Pair - Closer to center */}
               <PhotoFrame 
-                className="bottom-0 left-16 md:left-32 -rotate-3" 
+                className="bottom-0 left-20 md:left-40 -rotate-3" 
                 delay={3.4} 
               >
                 <img src="https://files.catbox.moe/dbjena.jpg" className="w-full h-full object-cover rounded-xl" />
               </PhotoFrame>
 
               <PhotoFrame 
-                className="bottom-0 right-16 md:right-32 rotate-3" 
+                className="bottom-0 right-20 md:right-40 rotate-3" 
                 delay={3.6} 
               >
                 <img src="https://files.catbox.moe/9nszlg.jpg" className="w-full h-full object-cover rounded-xl" />
