@@ -144,6 +144,109 @@ const Cityscape = () => {
   );
 };
 
+const Fireworks = () => {
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let particles: Particle[] = [];
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    class Particle {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      alpha: number;
+      color: string;
+      decay: number;
+
+      constructor(x: number, y: number, color: string) {
+        this.x = x;
+        this.y = y;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 6 + 2;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.alpha = 0.7; // Lighter alpha
+        this.color = color;
+        this.decay = Math.random() * 0.01 + 0.01;
+      }
+
+      draw() {
+        if (!ctx) return;
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.restore();
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += 0.05; // gravity
+        this.alpha -= this.decay;
+      }
+    }
+
+    const createFirework = (x: number, y: number) => {
+      // Pastel colors as requested before
+      const colors = ['#ffb3c6', '#fff4b3', '#b3fff0', '#ffb3ff', '#ffffff', '#ffd1b3', '#b3d9ff', '#d9ffb3'];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const particleCount = Math.floor(Math.random() * 40) + 60;
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle(x, y, color));
+      }
+    };
+
+    const loop = () => {
+      ctx.fillStyle = 'rgba(255, 241, 242, 0.15)'; // Match bg-pink-50 roughly for trail
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      if (Math.random() < 0.04) {
+        createFirework(Math.random() * canvas.width, Math.random() * canvas.height * 0.5);
+      }
+
+      particles = particles.filter(p => p.alpha > 0);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+
+      animationFrameId = requestAnimationFrame(loop);
+    };
+
+    window.addEventListener('resize', resize);
+    resize();
+    
+    // Initial bursts
+    for(let i = 0; i < 5; i++) {
+      createFirework(Math.random() * canvas.width, Math.random() * canvas.height * 0.5);
+    }
+    
+    loop();
+
+    return () => {
+      window.removeEventListener('resize', resize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" />;
+};
+
 export default function App() {
   const [stage, setStage] = useState<'loading' | 'intro' | 'main'>('loading');
   const [showVideo, setShowVideo] = useState(false);
@@ -156,6 +259,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-pink-50 font-sans text-pink-900 overflow-hidden relative">
       <FloatingHearts />
+      {stage === 'main' && <Fireworks />}
 
       <AnimatePresence mode="wait">
         {stage === 'loading' && (
@@ -224,14 +328,14 @@ export default function App() {
             <div className="relative w-full max-w-4xl h-64 md:h-80 flex items-center justify-center z-10">
               {/* Top Pair - Wide apart */}
               <PhotoFrame 
-                className="-top-6 md:-top-10 left-0 md:left-4 -rotate-6" 
+                className="-top-6 md:-top-10 -left-4 md:-left-12 -rotate-6" 
                 delay={3} 
               >
                 <img src="https://files.catbox.moe/9nszlg.jpg" className="w-full h-full object-cover rounded-xl" />
               </PhotoFrame>
 
               <PhotoFrame 
-                className="-top-6 md:-top-10 right-0 md:right-4 rotate-6" 
+                className="-top-6 md:-top-10 -right-4 md:-right-12 rotate-6" 
                 delay={3.2} 
               >
                 <img src="https://files.catbox.moe/69nynj.jpg" className="w-full h-full object-cover rounded-xl" />
