@@ -5,7 +5,60 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Heart, Flower2, Gift, Play, Building2, Car, Sparkles } from 'lucide-react';
+import { Heart, Flower2, Gift, Play, Building2, Car, Sparkles, CheckCircle2, XCircle, Trophy, ChevronLeft, ChevronRight } from 'lucide-react';
+
+const QUIZ_QUESTIONS = [
+  {
+    question: "Ngày Quốc tế Phụ nữ là ngày nào?",
+    options: ["8/3", "20/10", "14/2", "1/6"],
+    correct: 0
+  },
+  {
+    question: "Màu sắc biểu tượng của Ngày Quốc tế Phụ nữ là gì?",
+    options: ["Đỏ", "Tím", "Vàng", "Xanh"],
+    correct: 1
+  },
+  {
+    question: "Ai là người phụ nữ đầu tiên bay vào vũ trụ?",
+    options: ["Marie Curie", "Valentina Tereshkova", "Amelia Earhart", "Sally Ride"],
+    correct: 1
+  },
+  {
+    question: "Marie Curie là nhà khoa học nổi tiếng trong lĩnh vực nào?",
+    options: ["Vật lý & Hóa học", "Sinh học", "Toán học", "Thiên văn học"],
+    correct: 0
+  },
+  {
+    question: "Ngày Quốc tế Phụ nữ bắt đầu từ phong trào nào?",
+    options: ["Phong trào công nhân", "Phong trào nông dân", "Phong trào sinh viên", "Phong trào tôn giáo"],
+    correct: 0
+  },
+  {
+    question: "Nữ vương đầu tiên trong lịch sử Việt Nam là ai?",
+    options: ["Hai Bà Trưng", "Nguyên phi Ỷ Lan", "Thái hậu Dương Vân Nga", "Nam Phương Hoàng hậu"],
+    correct: 0
+  },
+  {
+    question: "Tác giả của bộ truyện Harry Potter là ai?",
+    options: ["J.K. Rowling", "Agatha Christie", "Emily Bronte", "Jane Austen"],
+    correct: 0
+  },
+  {
+    question: "Quốc gia nào đầu tiên cho phép phụ nữ bầu cử?",
+    options: ["New Zealand", "Mỹ", "Anh", "Pháp"],
+    correct: 0
+  },
+  {
+    question: "Biểu tượng 'We Can Do It!' ra đời trong cuộc chiến nào?",
+    options: ["Thế chiến I", "Thế chiến II", "Chiến tranh Lạnh", "Chiến tranh Việt Nam"],
+    correct: 1
+  },
+  {
+    question: "Chủ đề của Ngày Quốc tế Phụ nữ thường do tổ chức nào công bố?",
+    options: ["Liên Hợp Quốc", "WHO", "UNESCO", "WTO"],
+    correct: 0
+  }
+];
 
 const FloatingHearts = () => {
   const [hearts, setHearts] = useState<{ id: number; left: string; size: number; duration: number; delay: number }[]>([]);
@@ -44,25 +97,69 @@ const FloatingHearts = () => {
   );
 };
 
-const BloomingFlower = () => {
+const FallingPetals = () => {
+  const [petals, setPetals] = useState<{ id: number; left: string; size: number; duration: number; delay: number; rotate: number }[]>([]);
+
+  useEffect(() => {
+    const newPetals = Array.from({ length: 15 }).map((_, i) => ({
+      id: i,
+      left: `${Math.random() * 100}%`,
+      size: Math.random() * (24 - 12) + 12,
+      duration: Math.random() * (12 - 7) + 7,
+      delay: Math.random() * 10,
+      rotate: Math.random() * 360,
+    }));
+    setPetals(newPetals);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+      {petals.map((petal) => (
+        <motion.div
+          key={petal.id}
+          initial={{ y: -50, x: 0, opacity: 0, rotate: petal.rotate }}
+          animate={{ 
+            y: '110vh', 
+            x: [0, 50, -50, 20],
+            opacity: [0, 1, 1, 0],
+            rotate: petal.rotate + 360
+          }}
+          transition={{
+            duration: petal.duration,
+            repeat: Infinity,
+            delay: petal.delay,
+            ease: 'linear',
+          }}
+          style={{ left: petal.left }}
+          className="absolute text-pink-300/30"
+        >
+          <div className="w-4 h-6 bg-pink-400/40 rounded-full" style={{ width: petal.size, height: petal.size * 1.5, borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%' }} />
+        </motion.div>
+      ))}
+    </div>
+  );
+};
+
+const BloomingFlower = ({ onClick }: { onClick?: () => void }) => {
   return (
     <motion.div
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ delay: 1, duration: 1.5, ease: "easeOut" }}
-      className="relative w-48 h-48 flex items-center justify-center animate-sway"
+      onClick={onClick}
+      className={`relative w-48 h-48 flex items-center justify-center animate-sway ${onClick ? 'cursor-pointer hover:scale-110 transition-transform' : ''}`}
     >
       {/* Stem */}
       <div className="absolute bottom-0 w-2 h-24 bg-green-500 rounded-full">
         {/* Leaves */}
         <motion.div
-          animate={{ rotate: [0, 10, 0] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          animate={{ rotate: [0, 15, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           className="absolute bottom-8 -left-6 w-8 h-4 bg-green-600 rounded-full origin-right"
         />
         <motion.div
-          animate={{ rotate: [0, -10, 0] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+          animate={{ rotate: [0, -15, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
           className="absolute bottom-12 -right-6 w-8 h-4 bg-green-600 rounded-full origin-left"
         />
       </div>
@@ -72,8 +169,14 @@ const BloomingFlower = () => {
         <motion.div
           key={i}
           initial={{ scale: 0, rotate: angle }}
-          animate={{ scale: 1, rotate: angle }}
-          transition={{ delay: 1.5 + i * 0.1, duration: 0.8 }}
+          animate={{ 
+            scale: 1, 
+            rotate: [angle - 2, angle + 2, angle - 2] 
+          }}
+          transition={{ 
+            scale: { delay: 1.5 + i * 0.1, duration: 0.8 },
+            rotate: { duration: 3 + Math.random() * 2, repeat: Infinity, ease: "easeInOut", delay: Math.random() * 2 }
+          }}
           className="absolute w-16 h-24 bg-pink-500 rounded-full flower-petal opacity-90 shadow-lg"
           style={{ transformOrigin: 'bottom center', bottom: '50%' }}
         />
@@ -90,12 +193,13 @@ const BloomingFlower = () => {
   );
 };
 
-const PhotoFrame = ({ children, className, delay }: { children: React.ReactNode; className: string; delay: number }) => (
+const PhotoFrame = ({ children, className, delay, onClick }: { children: React.ReactNode; className: string; delay: number; onClick?: () => void }) => (
   <motion.div
     initial={{ opacity: 0, scale: 0.5 }}
     animate={{ opacity: 1, scale: 1 }}
     transition={{ delay, duration: 0.8, type: "spring" }}
-    className={`absolute w-40 h-56 md:w-56 md:h-72 bg-white p-2 rounded-2xl shadow-xl border-4 border-pink-200 flex flex-col items-center justify-center overflow-hidden animate-sway ${className}`}
+    onClick={onClick}
+    className={`absolute w-40 h-56 md:w-56 md:h-72 bg-white p-2 rounded-2xl shadow-xl border-4 border-pink-200 flex flex-col items-center justify-center overflow-hidden animate-sway cursor-pointer hover:z-50 hover:scale-105 transition-transform ${className}`}
   >
     {children}
   </motion.div>
@@ -247,9 +351,221 @@ const Fireworks = () => {
   return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" />;
 };
 
+const QuizGame = ({ onClose }: { onClose: () => void }) => {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [score, setScore] = useState(0);
+  const [showResult, setShowResult] = useState<'correct' | 'wrong' | null>(null);
+  const [isFinished, setIsFinished] = useState(false);
+
+  const handleAnswer = (index: number) => {
+    if (showResult) return;
+
+    if (index === QUIZ_QUESTIONS[currentQuestion].correct) {
+      setScore(s => s + 1);
+      setShowResult('correct');
+    } else {
+      setShowResult('wrong');
+    }
+
+    setTimeout(() => {
+      setShowResult(null);
+      if (currentQuestion < QUIZ_QUESTIONS.length - 1) {
+        setCurrentQuestion(c => c + 1);
+      } else {
+        setIsFinished(true);
+      }
+    }, 1500);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[200] bg-pink-900/40 backdrop-blur-md flex items-center justify-center p-4"
+    >
+      <motion.div
+        initial={{ scale: 0.9, y: 20 }}
+        animate={{ scale: 1, y: 0 }}
+        className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden relative"
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-pink-300 hover:text-pink-500 transition-colors"
+        >
+          <XCircle size={24} />
+        </button>
+
+        {!isFinished ? (
+          <div className="p-8">
+            <div className="flex justify-between items-center mb-6">
+              <span className="text-pink-400 font-bold text-sm uppercase tracking-wider">
+                Câu hỏi {currentQuestion + 1}/{QUIZ_QUESTIONS.length}
+              </span>
+              <span className="bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-sm font-bold">
+                Điểm: {score}
+              </span>
+            </div>
+
+            <h3 className="text-xl font-bold text-pink-900 mb-8 leading-tight">
+              {QUIZ_QUESTIONS[currentQuestion].question}
+            </h3>
+
+            <div className="space-y-3">
+              {QUIZ_QUESTIONS[currentQuestion].options.map((option, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleAnswer(i)}
+                  disabled={!!showResult}
+                  className={`w-full text-left p-4 rounded-xl border-2 transition-all font-medium flex justify-between items-center group
+                    ${showResult === null 
+                      ? 'border-pink-100 hover:border-pink-400 hover:bg-pink-50 text-pink-700' 
+                      : i === QUIZ_QUESTIONS[currentQuestion].correct
+                        ? 'border-green-500 bg-green-50 text-green-700'
+                        : i === QUIZ_QUESTIONS[currentQuestion].correct // This is just to keep the color if it was selected
+                          ? 'border-green-500 bg-green-50 text-green-700'
+                          : 'border-pink-100 opacity-50 text-pink-300'
+                    }
+                  `}
+                >
+                  <span>{String.fromCharCode(65 + i)}. {option}</span>
+                  {showResult && i === QUIZ_QUESTIONS[currentQuestion].correct && (
+                    <CheckCircle2 className="text-green-500" size={20} />
+                  )}
+                </button>
+              ))}
+            </div>
+
+            <AnimatePresence>
+              {showResult && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-[2px] pointer-events-none"
+                >
+                  {showResult === 'correct' ? (
+                    <div className="bg-white p-6 rounded-full shadow-xl border-4 border-green-500">
+                      <CheckCircle2 size={64} className="text-green-500" />
+                    </div>
+                  ) : (
+                    <div className="bg-white p-6 rounded-full shadow-xl border-4 border-red-500">
+                      <XCircle size={64} className="text-red-500" />
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        ) : (
+          <div className="p-10 text-center">
+            <div className="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Trophy size={40} className="text-yellow-600" />
+            </div>
+            <h3 className="text-2xl font-black text-pink-900 mb-2">Hoàn thành!</h3>
+            <p className="text-pink-500 mb-6 font-medium">Bạn đã trả lời đúng {score}/{QUIZ_QUESTIONS.length} câu hỏi.</p>
+            
+            <div className="bg-pink-50 p-4 rounded-2xl mb-8">
+              <p className="text-sm text-pink-600 italic">
+                {score === QUIZ_QUESTIONS.length 
+                  ? "Tuyệt vời! Bạn là một chuyên gia về phụ nữ!" 
+                  : score > 5 
+                    ? "Rất tốt! Bạn hiểu biết khá nhiều đấy!" 
+                    : "Cố gắng lên nhé, hãy tìm hiểu thêm về những người phụ nữ tuyệt vời!"}
+              </p>
+            </div>
+
+            <button
+              onClick={onClose}
+              className="w-full bg-pink-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-pink-200 hover:bg-pink-600 transition-all"
+            >
+              QUAY LẠI TRANG CHỦ
+            </button>
+          </div>
+        )}
+      </motion.div>
+    </motion.div>
+  );
+};
+
+const ZoomedPhoto = ({ photos, currentIndex, onClose, onNext, onPrev }: { photos: string[]; currentIndex: number; onClose: () => void; onNext: () => void; onPrev: () => void }) => (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    className="fixed inset-0 z-[300] bg-black/90 flex items-center justify-center p-4"
+    onClick={onClose}
+  >
+    <motion.div
+      initial={{ scale: 0.8, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.8, opacity: 0 }}
+      className="relative max-w-4xl w-full aspect-[3/4] md:aspect-auto md:h-[80vh] bg-white p-3 rounded-3xl shadow-2xl flex flex-col items-center"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <button
+        onClick={onClose}
+        className="absolute -top-12 right-0 text-white hover:text-pink-300 transition-colors"
+      >
+        <XCircle size={32} />
+      </button>
+
+      <div className="relative w-full h-full rounded-2xl overflow-hidden">
+        <motion.img
+          key={currentIndex}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          src={photos[currentIndex]}
+          className="w-full h-full object-cover"
+        />
+        
+        <button
+          onClick={onPrev}
+          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/40 hover:bg-white/60 p-3 rounded-full text-pink-600 backdrop-blur-md transition-all shadow-lg"
+        >
+          <ChevronLeft size={32} />
+        </button>
+        
+        <button
+          onClick={onNext}
+          className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/40 hover:bg-white/60 p-3 rounded-full text-pink-600 backdrop-blur-md transition-all shadow-lg"
+        >
+          <ChevronRight size={32} />
+        </button>
+      </div>
+
+      <div className="mt-4 flex gap-2">
+        {photos.map((_, i) => (
+          <div
+            key={i}
+            className={`w-2 h-2 rounded-full transition-all ${i === currentIndex ? 'bg-pink-500 w-6' : 'bg-pink-200'}`}
+          />
+        ))}
+      </div>
+    </motion.div>
+  </motion.div>
+);
+
 export default function App() {
   const [stage, setStage] = useState<'loading' | 'intro' | 'main'>('loading');
   const [showVideo, setShowVideo] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
+
+  const PHOTOS = [
+    "https://files.catbox.moe/9nszlg.jpg",
+    "https://files.catbox.moe/69nynj.jpg",
+    "https://files.catbox.moe/dbjena.jpg",
+    "https://files.catbox.moe/9nszlg.jpg",
+  ];
+
+  const handleNextPhoto = () => {
+    setSelectedPhotoIndex((prev) => (prev !== null ? (prev + 1) % PHOTOS.length : null));
+  };
+
+  const handlePrevPhoto = () => {
+    setSelectedPhotoIndex((prev) => (prev !== null ? (prev - 1 + PHOTOS.length) % PHOTOS.length : null));
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => setStage('intro'), 2000);
@@ -259,6 +575,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-pink-50 font-sans text-pink-900 overflow-hidden relative">
       <FloatingHearts />
+      <FallingPetals />
       {stage === 'main' && <Fireworks />}
 
       <AnimatePresence mode="wait">
@@ -316,10 +633,10 @@ export default function App() {
               transition={{ duration: 1, ease: "easeOut" }}
               className="text-center z-20 px-4"
             >
-              <h1 className="text-3xl md:text-5xl font-black text-pink-600 drop-shadow-md mb-1">
+              <h1 className="text-5xl md:text-7xl font-amsterdam text-pink-600 drop-shadow-md mb-2">
                 Chúc Mừng Ngày Quốc Tế Phụ Nữ
               </h1>
-              <h2 className="text-5xl md:text-7xl font-black text-pink-400 drop-shadow-xl">
+              <h2 className="text-7xl md:text-9xl font-amsterdam text-pink-400 drop-shadow-xl">
                 8 - 3
               </h2>
             </motion.div>
@@ -330,36 +647,53 @@ export default function App() {
               <PhotoFrame 
                 className="-top-6 md:-top-10 -left-4 md:-left-12 -rotate-6" 
                 delay={3} 
+                onClick={() => setSelectedPhotoIndex(0)}
               >
-                <img src="https://files.catbox.moe/9nszlg.jpg" className="w-full h-full object-cover rounded-xl" />
+                <img src={PHOTOS[0]} className="w-full h-full object-cover rounded-xl" />
               </PhotoFrame>
 
               <PhotoFrame 
                 className="-top-6 md:-top-10 -right-4 md:-right-12 rotate-6" 
                 delay={3.2} 
+                onClick={() => setSelectedPhotoIndex(1)}
               >
-                <img src="https://files.catbox.moe/69nynj.jpg" className="w-full h-full object-cover rounded-xl" />
+                <img src={PHOTOS[1]} className="w-full h-full object-cover rounded-xl" />
               </PhotoFrame>
               
               {/* Bottom Pair - Closer to center */}
               <PhotoFrame 
                 className="bottom-0 left-20 md:left-40 -rotate-3" 
                 delay={3.4} 
+                onClick={() => setSelectedPhotoIndex(2)}
               >
-                <img src="https://files.catbox.moe/dbjena.jpg" className="w-full h-full object-cover rounded-xl" />
+                <img src={PHOTOS[2]} className="w-full h-full object-cover rounded-xl" />
               </PhotoFrame>
 
               <PhotoFrame 
                 className="bottom-0 right-20 md:right-40 rotate-3" 
                 delay={3.6} 
+                onClick={() => setSelectedPhotoIndex(3)}
               >
-                <img src="https://files.catbox.moe/9nszlg.jpg" className="w-full h-full object-cover rounded-xl" />
+                <img src={PHOTOS[3]} className="w-full h-full object-cover rounded-xl" />
               </PhotoFrame>
 
-              <BloomingFlower />
+              <BloomingFlower onClick={() => setShowQuiz(true)} />
             </div>
 
             <Cityscape />
+
+            <AnimatePresence>
+              {showQuiz && <QuizGame onClose={() => setShowQuiz(false)} />}
+              {selectedPhotoIndex !== null && (
+                <ZoomedPhoto 
+                  photos={PHOTOS}
+                  currentIndex={selectedPhotoIndex}
+                  onClose={() => setSelectedPhotoIndex(null)}
+                  onNext={handleNextPhoto}
+                  onPrev={handlePrevPhoto}
+                />
+              )}
+            </AnimatePresence>
 
             {/* Video Section */}
             <motion.div
