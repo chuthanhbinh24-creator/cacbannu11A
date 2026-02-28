@@ -5,7 +5,64 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Heart, Flower2, Gift, Play, Building2, Car, Sparkles, CheckCircle2, XCircle, Trophy, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Heart, Flower2, Gift, Play, Building2, Car, Sparkles, CheckCircle2, XCircle, Trophy, ChevronLeft, ChevronRight, Music, Volume2, VolumeX } from 'lucide-react';
+
+const MusicPlayer = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [showControls, setShowControls] = useState(true);
+  const audioRef = React.useRef<HTMLAudioElement>(null);
+
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play().catch(e => console.log("Audio play failed:", e));
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  return (
+    <div className="fixed bottom-20 right-4 md:right-8 z-[150] flex flex-col items-end gap-2">
+      <AnimatePresence>
+        {showControls && (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            className="flex flex-col items-end gap-2"
+          >
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={togglePlay}
+              className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center shadow-lg transition-all ${
+                isPlaying ? 'bg-pink-500 text-white animate-pulse' : 'bg-white text-pink-500 border-2 border-pink-200'
+              }`}
+            >
+              {isPlaying ? <Volume2 size={24} /> : <VolumeX size={24} />}
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <button
+        onClick={() => setShowControls(!showControls)}
+        className="bg-white/60 backdrop-blur-sm p-2 rounded-full text-pink-400 hover:text-pink-600 transition-colors shadow-sm border border-pink-100"
+        title={showControls ? "Ẩn điều khiển" : "Hiện điều khiển"}
+      >
+        <Music size={18} className={isPlaying ? "animate-spin-slow" : ""} />
+      </button>
+
+      <audio
+        ref={audioRef}
+        src="https://marginal-amethyst-e9comixmhv.edgeone.app/Nơi%20Này%20Có%20Anh%20(Lyrics%20Video).mp3"
+        loop
+      />
+    </div>
+  );
+};
 
 const QUIZ_QUESTIONS = [
   {
@@ -576,6 +633,7 @@ export default function App() {
     <div className="min-h-screen bg-pink-50 font-sans text-pink-900 overflow-hidden relative">
       <FloatingHearts />
       <FallingPetals />
+      <MusicPlayer />
       {stage === 'main' && <Fireworks />}
 
       <AnimatePresence mode="wait">
