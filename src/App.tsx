@@ -57,65 +57,12 @@ const MusicPlayer = () => {
 
       <audio
         ref={audioRef}
-        src="https://yearling-magenta-nwzt3z9ojl.edgeone.app/Nơi%20Này%20Có%20Anh%20(Lyrics%20Video)%20-%20M-TP%20Audio.mp3"
+        src="https://glorious-brown-misjkt9cql.edgeone.app/Nơi%20Này%20Có%20Anh%20(Lyrics%20Video)%20-%20M-TP%20Audio.mp3"
         loop
       />
     </div>
   );
 };
-
-const QUIZ_QUESTIONS = [
-  {
-    question: "Ngày Quốc tế Phụ nữ là ngày nào?",
-    options: ["8/3", "20/10", "14/2", "1/6"],
-    correct: 0
-  },
-  {
-    question: "Màu sắc biểu tượng của Ngày Quốc tế Phụ nữ là gì?",
-    options: ["Đỏ", "Tím", "Vàng", "Xanh"],
-    correct: 1
-  },
-  {
-    question: "Ai là người phụ nữ đầu tiên bay vào vũ trụ?",
-    options: ["Marie Curie", "Valentina Tereshkova", "Amelia Earhart", "Sally Ride"],
-    correct: 1
-  },
-  {
-    question: "Marie Curie là nhà khoa học nổi tiếng trong lĩnh vực nào?",
-    options: ["Vật lý & Hóa học", "Sinh học", "Toán học", "Thiên văn học"],
-    correct: 0
-  },
-  {
-    question: "Ngày Quốc tế Phụ nữ bắt đầu từ phong trào nào?",
-    options: ["Phong trào công nhân", "Phong trào nông dân", "Phong trào sinh viên", "Phong trào tôn giáo"],
-    correct: 0
-  },
-  {
-    question: "Nữ vương đầu tiên trong lịch sử Việt Nam là ai?",
-    options: ["Hai Bà Trưng", "Nguyên phi Ỷ Lan", "Thái hậu Dương Vân Nga", "Nam Phương Hoàng hậu"],
-    correct: 0
-  },
-  {
-    question: "Tác giả của bộ truyện Harry Potter là ai?",
-    options: ["J.K. Rowling", "Agatha Christie", "Emily Bronte", "Jane Austen"],
-    correct: 0
-  },
-  {
-    question: "Quốc gia nào đầu tiên cho phép phụ nữ bầu cử?",
-    options: ["New Zealand", "Mỹ", "Anh", "Pháp"],
-    correct: 0
-  },
-  {
-    question: "Biểu tượng 'We Can Do It!' ra đời trong cuộc chiến nào?",
-    options: ["Thế chiến I", "Thế chiến II", "Chiến tranh Lạnh", "Chiến tranh Việt Nam"],
-    correct: 1
-  },
-  {
-    question: "Chủ đề của Ngày Quốc tế Phụ nữ thường do tổ chức nào công bố?",
-    options: ["Liên Hợp Quốc", "WHO", "UNESCO", "WTO"],
-    correct: 0
-  }
-];
 
 const FloatingHearts = () => {
   const [hearts, setHearts] = useState<{ id: number; left: string; size: number; duration: number; delay: number }[]>([]);
@@ -408,143 +355,6 @@ const Fireworks = () => {
   return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" />;
 };
 
-const QuizGame = ({ onClose }: { onClose: () => void }) => {
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [score, setScore] = useState(0);
-  const [showResult, setShowResult] = useState<'correct' | 'wrong' | null>(null);
-  const [isFinished, setIsFinished] = useState(false);
-
-  const handleAnswer = (index: number) => {
-    if (showResult) return;
-
-    if (index === QUIZ_QUESTIONS[currentQuestion].correct) {
-      setScore(s => s + 1);
-      setShowResult('correct');
-    } else {
-      setShowResult('wrong');
-    }
-
-    setTimeout(() => {
-      setShowResult(null);
-      if (currentQuestion < QUIZ_QUESTIONS.length - 1) {
-        setCurrentQuestion(c => c + 1);
-      } else {
-        setIsFinished(true);
-      }
-    }, 1500);
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[200] bg-pink-900/40 backdrop-blur-md flex items-center justify-center p-4"
-    >
-      <motion.div
-        initial={{ scale: 0.9, y: 20 }}
-        animate={{ scale: 1, y: 0 }}
-        className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden relative"
-      >
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-pink-300 hover:text-pink-500 transition-colors"
-        >
-          <XCircle size={24} />
-        </button>
-
-        {!isFinished ? (
-          <div className="p-8">
-            <div className="flex justify-between items-center mb-6">
-              <span className="text-pink-400 font-bold text-sm uppercase tracking-wider">
-                Câu hỏi {currentQuestion + 1}/{QUIZ_QUESTIONS.length}
-              </span>
-              <span className="bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-sm font-bold">
-                Điểm: {score}
-              </span>
-            </div>
-
-            <h3 className="text-xl font-bold text-pink-900 mb-8 leading-tight">
-              {QUIZ_QUESTIONS[currentQuestion].question}
-            </h3>
-
-            <div className="space-y-3">
-              {QUIZ_QUESTIONS[currentQuestion].options.map((option, i) => (
-                <button
-                  key={i}
-                  onClick={() => handleAnswer(i)}
-                  disabled={!!showResult}
-                  className={`w-full text-left p-4 rounded-xl border-2 transition-all font-medium flex justify-between items-center group
-                    ${showResult === null 
-                      ? 'border-pink-100 hover:border-pink-400 hover:bg-pink-50 text-pink-700' 
-                      : i === QUIZ_QUESTIONS[currentQuestion].correct
-                        ? 'border-green-500 bg-green-50 text-green-700'
-                        : i === QUIZ_QUESTIONS[currentQuestion].correct // This is just to keep the color if it was selected
-                          ? 'border-green-500 bg-green-50 text-green-700'
-                          : 'border-pink-100 opacity-50 text-pink-300'
-                    }
-                  `}
-                >
-                  <span>{String.fromCharCode(65 + i)}. {option}</span>
-                  {showResult && i === QUIZ_QUESTIONS[currentQuestion].correct && (
-                    <CheckCircle2 className="text-green-500" size={20} />
-                  )}
-                </button>
-              ))}
-            </div>
-
-            <AnimatePresence>
-              {showResult && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.5 }}
-                  className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-[2px] pointer-events-none"
-                >
-                  {showResult === 'correct' ? (
-                    <div className="bg-white p-6 rounded-full shadow-xl border-4 border-green-500">
-                      <CheckCircle2 size={64} className="text-green-500" />
-                    </div>
-                  ) : (
-                    <div className="bg-white p-6 rounded-full shadow-xl border-4 border-red-500">
-                      <XCircle size={64} className="text-red-500" />
-                    </div>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        ) : (
-          <div className="p-10 text-center">
-            <div className="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Trophy size={40} className="text-yellow-600" />
-            </div>
-            <h3 className="text-2xl font-black text-pink-900 mb-2">Hoàn thành!</h3>
-            <p className="text-pink-500 mb-6 font-medium">Bạn đã trả lời đúng {score}/{QUIZ_QUESTIONS.length} câu hỏi.</p>
-            
-            <div className="bg-pink-50 p-4 rounded-2xl mb-8">
-              <p className="text-sm text-pink-600 italic">
-                {score === QUIZ_QUESTIONS.length 
-                  ? "Tuyệt vời! Bạn là một chuyên gia về phụ nữ!" 
-                  : score > 5 
-                    ? "Rất tốt! Bạn hiểu biết khá nhiều đấy!" 
-                    : "Cố gắng lên nhé, hãy tìm hiểu thêm về những người phụ nữ tuyệt vời!"}
-              </p>
-            </div>
-
-            <button
-              onClick={onClose}
-              className="w-full bg-pink-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-pink-200 hover:bg-pink-600 transition-all"
-            >
-              QUAY LẠI TRANG CHỦ
-            </button>
-          </div>
-        )}
-      </motion.div>
-    </motion.div>
-  );
-};
-
 const ZoomedPhoto = ({ photos, currentIndex, onClose, onNext, onPrev }: { photos: string[]; currentIndex: number; onClose: () => void; onNext: () => void; onPrev: () => void }) => (
   <motion.div
     initial={{ opacity: 0 }}
@@ -606,7 +416,6 @@ const ZoomedPhoto = ({ photos, currentIndex, onClose, onNext, onPrev }: { photos
 export default function App() {
   const [stage, setStage] = useState<'loading' | 'intro' | 'main'>('loading');
   const [showVideo, setShowVideo] = useState(false);
-  const [showQuiz, setShowQuiz] = useState(false);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
 
   const PHOTOS = [
@@ -735,13 +544,12 @@ export default function App() {
                 <img src={PHOTOS[3]} className="w-full h-full object-cover rounded-xl" />
               </PhotoFrame>
 
-              <BloomingFlower onClick={() => setShowQuiz(true)} />
+              <BloomingFlower />
             </div>
 
             <Cityscape />
 
             <AnimatePresence>
-              {showQuiz && <QuizGame onClose={() => setShowQuiz(false)} />}
               {selectedPhotoIndex !== null && (
                 <ZoomedPhoto 
                   photos={PHOTOS}
