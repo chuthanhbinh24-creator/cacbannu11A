@@ -673,7 +673,7 @@ export default function App() {
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                       </button>
                       <video 
-                        src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" 
+                        src="https://videotourl.com/videos/1772986340031-62746bde-3112-47cf-88a0-b22398f579c6.mp4" 
                         controls 
                         autoPlay
                         className="w-full h-full object-contain" 
