@@ -57,7 +57,7 @@ const MusicPlayer = () => {
 
       <audio
         ref={audioRef}
-        src="https://glorious-brown-misjkt9cql.edgeone.app/Nơi%20Này%20Có%20Anh%20(Lyrics%20Video)%20-%20M-TP%20Audio.mp3"
+        src="https://image2url.com/r2/default/audio/1772987045122-b19d5014-50e2-45ff-ba6d-ca2745ec127d.mp3"
         loop
       />
     </div>
