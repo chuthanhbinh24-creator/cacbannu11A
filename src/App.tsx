@@ -148,10 +148,19 @@ const BloomingFlower = ({ onClick }: { onClick?: () => void }) => {
   return (
     <motion.div
       initial={{ scale: 0, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ delay: 1, duration: 1.5, ease: "easeOut" }}
+      animate={{ 
+        scale: 1, 
+        opacity: 1,
+        rotate: [-2, 2, -2]
+      }}
+      transition={{ 
+        scale: { delay: 1, duration: 1.5, ease: "easeOut" },
+        opacity: { delay: 1, duration: 1.5 },
+        rotate: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+      }}
+      whileHover={{ y: -30, scale: 1.15, rotate: 0 }}
       onClick={onClick}
-      className={`relative w-48 h-48 flex items-center justify-center animate-sway ${onClick ? 'cursor-pointer hover:scale-110 transition-transform' : ''}`}
+      className="relative w-48 h-48 flex items-center justify-center cursor-pointer transition-all z-20"
     >
       {/* Stem */}
       <div className="absolute bottom-0 w-2 h-24 bg-green-500 rounded-full">
@@ -193,6 +202,16 @@ const BloomingFlower = ({ onClick }: { onClick?: () => void }) => {
         transition={{ delay: 2.5, duration: 0.5 }}
         className="absolute w-12 h-12 bg-yellow-400 rounded-full z-10 shadow-inner"
       />
+      
+      {/* Tooltip hint */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: [0, 1, 0], y: [10, -10, -20] }}
+        transition={{ duration: 3, repeat: Infinity, delay: 4 }}
+        className="absolute -top-12 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-pink-500 shadow-sm border border-pink-100 whitespace-nowrap"
+      >
+        Mở thư nè! 💌
+      </motion.div>
     </motion.div>
   );
 };
@@ -413,9 +432,63 @@ const ZoomedPhoto = ({ photos, currentIndex, onClose, onNext, onPrev }: { photos
   </motion.div>
 );
 
+const LetterModal = ({ onClose }: { onClose: () => void }) => (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    className="fixed inset-0 z-[400] bg-pink-900/40 backdrop-blur-md flex items-center justify-center p-4"
+    onClick={onClose}
+  >
+    <motion.div
+      initial={{ y: 100, opacity: 0, rotate: -5 }}
+      animate={{ y: 0, opacity: 1, rotate: 0 }}
+      exit={{ y: 100, opacity: 0, scale: 0.8 }}
+      className="relative max-w-lg w-full bg-[#fff9f0] p-8 md:p-12 rounded-sm shadow-2xl border-t-[30px] border-pink-200"
+      onClick={(e) => e.stopPropagation()}
+      style={{
+        boxShadow: '0 10px 30px rgba(0,0,0,0.1), inset 0 0 100px rgba(255,255,255,0.5)',
+        backgroundImage: 'repeating-linear-gradient(#fff9f0, #fff9f0 30px, #e5e5e5 31px)'
+      }}
+    >
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 text-pink-400 hover:text-pink-600 transition-colors"
+      >
+        <XCircle size={24} />
+      </button>
+
+      <div className="font-amsterdam text-4xl text-pink-600 mb-6 text-center">
+        Gửi đến các bạn nữ lớp 11A!
+      </div>
+
+      <div className="space-y-4 text-pink-800 leading-relaxed font-medium">
+        <p>
+          Chúc các bạn luôn xinh đẹp, tự tin, học tập thật tốt và luôn tràn đầy năng lượng tích cực.
+        </p>
+        <p>
+          Mong rằng mỗi ngày đến trường đều là một ngày vui với nhiều kỷ niệm đẹp bên bạn bè và thầy cô.
+        </p>
+        <p>
+          Chúc các bạn luôn hạnh phúc và đạt được những ước mơ của mình.
+        </p>
+      </div>
+
+      {/* Decorative elements */}
+      <div className="absolute -bottom-4 -right-4 text-pink-300 opacity-50 rotate-12">
+        <Flower2 size={80} />
+      </div>
+      <div className="absolute -top-10 -left-6 text-pink-200 opacity-40 -rotate-12">
+        <Heart size={60} fill="currentColor" />
+      </div>
+    </motion.div>
+  </motion.div>
+);
+
 export default function App() {
   const [stage, setStage] = useState<'loading' | 'intro' | 'main'>('loading');
   const [showVideo, setShowVideo] = useState(false);
+  const [showLetter, setShowLetter] = useState(false);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
 
   const PHOTOS = [
@@ -544,7 +617,7 @@ export default function App() {
                 <img src={PHOTOS[3]} className="w-full h-full object-cover rounded-xl" />
               </PhotoFrame>
 
-              <BloomingFlower />
+              <BloomingFlower onClick={() => setShowLetter(true)} />
             </div>
 
             <Cityscape />
@@ -558,6 +631,9 @@ export default function App() {
                   onNext={handleNextPhoto}
                   onPrev={handlePrevPhoto}
                 />
+              )}
+              {showLetter && (
+                <LetterModal onClose={() => setShowLetter(false)} />
               )}
             </AnimatePresence>
 
