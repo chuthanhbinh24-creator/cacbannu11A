@@ -9,7 +9,7 @@ import { Heart, Flower2, Gift, Play, Building2, Car, Sparkles, CheckCircle2, XCi
 
 // --- CONFIGURATION ---
 // Bạn có thể thay đổi link nhạc ở đây
-const AUDIO_URL = "https://educational-amethyst-tj4kg3ck0b.edgeone.app/Shiki,%20Low%20G,%20Justatee%20-%20In%20Love%20x%20Có%20Đôi%20Điều%20(Pizuh%20Mashup)%20-%20Pizuh.mp3";
+const AUDIO_URL = "https://raw-blue-1w3wtkrnku.edgeone.app/mp32.mp3";
 
 const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
