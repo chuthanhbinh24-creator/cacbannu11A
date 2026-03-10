@@ -7,6 +7,10 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Heart, Flower2, Gift, Play, Building2, Car, Sparkles, CheckCircle2, XCircle, Trophy, ChevronLeft, ChevronRight, Music, Volume2, VolumeX } from 'lucide-react';
 
+// --- CONFIGURATION ---
+// Bạn có thể thay đổi link nhạc ở đây
+const AUDIO_URL = "https://educational-amethyst-tj4kg3ck0b.edgeone.app/Shiki,%20Low%20G,%20Justatee%20-%20In%20Love%20x%20Có%20Đôi%20Điều%20(Pizuh%20Mashup)%20-%20Pizuh.mp3";
+
 const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showControls, setShowControls] = useState(true);
@@ -57,7 +61,7 @@ const MusicPlayer = () => {
 
       <audio
         ref={audioRef}
-        src="https://image2url.com/r2/default/audio/1772987045122-b19d5014-50e2-45ff-ba6d-ca2745ec127d.mp3"
+        src={AUDIO_URL}
         loop
       />
     </div>
